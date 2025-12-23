@@ -20,10 +20,10 @@ import streamlit as st
 
 
 # pendekatan dgn st.Page ditaruh pada page_link (membuat custom navigation di sidebar), biar bisa nambah logo + judul di sidebar
-home_page = st.Page("pages/home_page.py")
-list_mutual_fund_page = st.Page("pages/list_mutual_fund.py")
-list_criteria_page = st.Page("pages/list_criteria.py")
-recommendation_page = st.Page("pages/recommendation.py")
+home_page = st.Page("pages/home_page.py", title="Beranda")
+list_mutual_fund_page = st.Page("pages/list_mutual_fund.py", title="Daftar Reksa Dana")
+list_criteria_page = st.Page("pages/list_criteria.py", title="Daftar Kriteria Seleksi")
+recommendation_page = st.Page("pages/recommendation.py", title="Rekomendasi Reksa Danas")
 
 with st.sidebar:
     st.title("Sistem Pendukung Keputusan Rekomendasi Reksa Dana")
