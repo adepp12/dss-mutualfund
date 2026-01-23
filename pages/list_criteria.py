@@ -4,7 +4,6 @@ from streamlit_extras.great_tables import great_tables
 from great_tables import GT
 
 st.title("Daftar Kriteria Seleksi")
-
 st.write("Berikut merupakan daftar kriteria beserta penjelasannya yang digunakan untuk pertimbangan dalam memilih produk reksa dana")
 
 data_criteria = [
@@ -29,7 +28,7 @@ data_criteria = [
     {
         "Nama Kriteria": "Asset Under Management (AUM)",
         "Deskripsi": "Total dana yang dikelola oleh Manajer Investasi pada suatu reksa dana",
-        "Satuan": "Miliar / Triliun Rupiah",
+        "Satuan": "Miliar (M) / Triliun (T) Rupiah",
         "Jenis": "🟢 Benefit"
     },
     {
@@ -77,5 +76,4 @@ st.html(
 </style>
 """)
 
-
-great_tables(table_criteria, width="stretch")
+great_tables(table_criteria)
