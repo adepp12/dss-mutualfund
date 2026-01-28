@@ -65,22 +65,12 @@ with col_sort:
 
 with col_asc:
     st.session_state["_sort_asc"] = "A-Z" if st.session_state.sort_asc else "Z-A"
-    asc_label = st.radio(
-        "",
-        ["A-Z", "Z-A"],
-        horizontal=True,
-        key="_sort_asc",
-        on_change=store_sort_asc,
-    )
+    asc_label = st.radio("", ["A-Z", "Z-A"], horizontal=True, key="_sort_asc", on_change=store_sort_asc)
     ascending = asc_label == "A-Z"
 
 sort_col = sort_options[sort_by_label]
 
-clean_df_sorted = clean_df.sort_values(
-    by=sort_col,
-    ascending=ascending,
-    ignore_index=True,
-)
+clean_df_sorted = clean_df.sort_values(by=sort_col, ascending=ascending, ignore_index=True)
 
 # --- logika loop baru, data terurut saat responsif
 with st.container(width="stretch", key="list-mutual-fund-container"):
