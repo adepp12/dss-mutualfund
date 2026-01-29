@@ -37,7 +37,7 @@ st.html(
     """
 )
 
-clean_df = st.session_state.clean_df
+# clean_df = st.session_state.clean_df
 if "selected_criteria" not in st.session_state:
     st.session_state.selected_criteria = [item["Nama Kolom"] for item in DATA_CRITERIA]
 if "sorted_criteria" not in st.session_state:
@@ -92,7 +92,7 @@ with col2:
         st.write(":material/arrow_downward:")
 
 # st.write("Hasil urutan:", sorted_items)
-data = clean_df
+data = st.session_state.get("clean_df", None)
 
 if sorted_items:
     urutan_kriteria = sorted_items 
@@ -115,9 +115,12 @@ if sorted_items:
 
     # trigger decision-making step
     if st.button("Lihat Hasil Rekomendasi :material/arrow_forward:"):
-        st.session_state.moora_ranking_df = moora_ranking2(data=data, kriteria=kriteria_dipertimbangkan, jenis_kriteria=jenis_kriteria, bobot=bobot_kriteria_fungsi)
+        if data is None:
+            st.error("Tidak ada data untuk ditampilkan.", icon=":material/warning:")
+        else:
+            st.session_state.moora_ranking_df = moora_ranking2(data=data, kriteria=kriteria_dipertimbangkan, jenis_kriteria=jenis_kriteria, bobot=bobot_kriteria_fungsi)
 
-        st.toast("Rekomendasi rekda dana berhasil dibuat!", icon=":material/celebration:", duration=2)
+            st.toast("Rekomendasi rekda dana berhasil dibuat!", icon=":material/celebration:", duration=2)
 else:
     st.error("Pilih minimal 1 (satu) kriteria untuk dipertimbangkan", icon=":material/error:")
 

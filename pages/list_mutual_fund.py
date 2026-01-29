@@ -29,6 +29,14 @@ st.html(
     """
 )
 
+st.title("Daftar Reksa Dana Saham")
+
+if "clean_df" not in st.session_state:
+    st.error("Tidak ada data untuk ditampilkan.", icon=":material/error:")
+    st.stop()
+
+clean_df = st.session_state.clean_df
+
 if "sort_label" not in st.session_state:
     st.session_state.sort_label = "Nama Reksa Dana"
 if "sort_asc" not in st.session_state:
@@ -38,10 +46,6 @@ def store_sort_label():
     st.session_state.sort_label = st.session_state["_sort_label"]
 def store_sort_asc():
     st.session_state.sort_asc = st.session_state["_sort_asc"] == "A-Z"
-
-st.title("Daftar Reksa Dana Saham")
-
-clean_df = st.session_state.clean_df
 
 col_text, col_sort, col_asc = st.columns([3, 2, 1])
 with col_text:
