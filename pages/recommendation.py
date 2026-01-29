@@ -47,8 +47,8 @@ def store_selected():
     st.session_state.selected_criteria = st.session_state._selected_criteria
     st.session_state.sorted_criteria = st.session_state.selected_criteria.copy()
 # callback untuk menyimpan hasil sort
-def store_sorted(new_order):
-    st.session_state.sorted_criteria = new_order
+def store_sorted():
+    st.session_state.sorted_criteria = st.session_state._sorted_criteria
 
 st.title("Rekomendasi Reksa Dana")
 st.markdown("#### :material/select_check_box: Pilih Kriteria yang Ingin Dipertimbangkan:")
@@ -64,6 +64,7 @@ selected_criteria = st.multiselect("", list_criteria, key="_selected_criteria", 
 st.markdown("#### :material/sort: Urutkan Kriteria Sesuai Prioritasmu:")
 with st.container(width="stretch", key="caption-priority-info-container"):
     st.caption("Urutkan dari paling penting (atas) ke paling tidak penting (bawah).") # muncul saat width layar paling kecil, karna kontainer info gk cukup
+    st.caption("Urutkan dengan tahan kriteria beberapa saat, lalu pindahkan ke urutan yang diinginkan.")
 
 # --- dengan st.columns
 col1, col2 = st.columns([3, 1], vertical_alignment="center")
@@ -74,11 +75,16 @@ with col1:
         #     st.session_state.kriteria = ['Return', 'Drawdown', 'Total AUM', 'Last NAV', 'Expense Ratio', 'Minimal Pembelian']
 
         # Menampilkan widget pengurutan
-        # sort_key = f"sortable-{'-'.join(sorted(selected_criteria))}"
+        sort_key = f"sortable-{'-'.join(sorted(selected_criteria))}"
 
         # items = [{'items': options}]
-        sorted_items = sort_items(items=st.session_state.sorted_criteria, direction='vertical', multi_containers=False)
-        store_sorted(sorted_items)
+        st.session_state._sorted_criteria = st.session_state.sorted_criteria
+        sorted_items = sort_items(items=st.session_state._sorted_criteria, 
+                                  direction='vertical', 
+                                  multi_containers=False, 
+                                  key=sort_key)
+        st.session_state._sorted_criteria = sorted_items
+        store_sorted()
         # sorted_items akan berisi daftar yang sudah diurutkan oleh user
         # st.write("Hasil urutan:", sorted_items)
 
