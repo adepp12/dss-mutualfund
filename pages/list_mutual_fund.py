@@ -46,7 +46,7 @@ clean_df = st.session_state.clean_df
 col_text, col_sort, col_asc = st.columns([3, 2, 1])
 with col_text:
     st.write("Data yang ditampilkan dalam periode 1 Tahun (1Y)")
-    last_update = pd.to_datetime(clean_df['Waktu Scraping'][0]).strftime('%d %B %Y')
+    last_update = st.session_state.get("last_update", "unknown")
     st.write(f":material/update: Terakhir diperbarui pada: {last_update}")
 
 with col_sort:
