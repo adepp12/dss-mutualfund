@@ -1,4 +1,16 @@
 import streamlit as st
+import pandas as pd
+from function.preprocessing import cleaning_data
+from constant import URL_DATASET
+
+st.set_page_config(layout="wide")
+
+# mengambil dataset dan simpan di session_state
+if "clean_df" not in st.session_state:
+    url_dataset = URL_DATASET
+    dataset_df = pd.read_csv(url_dataset)
+    clean_df = cleaning_data(dataset_df)
+    st.session_state["clean_df"] = clean_df
 
 # st.sidebar.write("Copyright 2025")
 
@@ -23,7 +35,7 @@ import streamlit as st
 home_page = st.Page("pages/home_page.py", title="Beranda")
 list_mutual_fund_page = st.Page("pages/list_mutual_fund.py", title="Daftar Reksa Dana")
 list_criteria_page = st.Page("pages/list_criteria.py", title="Daftar Kriteria Seleksi")
-recommendation_page = st.Page("pages/recommendation.py", title="Rekomendasi Reksa Danas")
+recommendation_page = st.Page("pages/recommendation.py", title="Rekomendasi Reksa Dana")
 
 with st.sidebar:
     st.title("Sistem Pendukung Keputusan Rekomendasi Reksa Dana")
@@ -33,7 +45,7 @@ with st.sidebar:
     st.page_link(list_mutual_fund_page, label="Daftar Reksa Dana", icon=":material/finance_mode:")
     st.page_link(list_criteria_page, label="Daftar Kriteria Seleksi", icon=":material/format_list_bulleted:")
     st.page_link(recommendation_page, label="Rekomendasi Reksa Dana", icon=":material/recommend:")
-
+    
     st.caption("Copyright © 2025 by Putra U")
 
 pg = st.navigation([home_page, list_mutual_fund_page, list_criteria_page, recommendation_page])
