@@ -1,2 +1,6 @@
 __pycache__/
+*.py[cod]
 venv/
+contoh_konten.html
+.streamlit/secrets.toml
+secrets.toml
