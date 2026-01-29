@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 from streamlit_sortables import sort_items
 from function.mcdm_method import roc_weighting2, moora_ranking2
 from constant import DATA_CRITERIA
