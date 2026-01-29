@@ -137,10 +137,11 @@ if st.session_state.get("moora_ranking_df") is not None:
             .to_csv(index=False)
             .encode("utf-8")
         )
+        last_update = st.session_state.get("last_update", "unknown")
         st.download_button(
             label="Download Hasil Perhitungan (.csv)",
             data=moora_result_csv,
-            file_name="hasil_perhitungan_dss.csv",
+            file_name=f"hasil_perhitungan_dss_{last_update}.csv",
             mime="text/csv",
             icon=":material/download:",
             on_click="ignore"
