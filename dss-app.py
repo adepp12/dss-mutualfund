@@ -1,16 +1,18 @@
 import streamlit as st
 import pandas as pd
 from function.preprocessing import cleaning_data
-from constant import URL_DATASET
 
 st.set_page_config(layout="wide")
 
 # mengambil dataset dan simpan di session_state
 if "clean_df" not in st.session_state:
-    url_dataset = URL_DATASET
+    url_dataset = st.secrets["URL_DATASET"]
     dataset_df = pd.read_csv(url_dataset)
     clean_df = cleaning_data(dataset_df)
     st.session_state["clean_df"] = clean_df
+    
+    last_update = pd.to_datetime(clean_df['Waktu Scraping'][0]).strftime('%d %B %Y')
+    st.session_state.last_update = last_update
 
 # st.sidebar.write("Copyright 2025")
 
@@ -46,7 +48,7 @@ with st.sidebar:
     st.page_link(list_criteria_page, label="Daftar Kriteria Seleksi", icon=":material/format_list_bulleted:")
     st.page_link(recommendation_page, label="Rekomendasi Reksa Dana", icon=":material/recommend:")
     
-    st.caption("Copyright © 2025 by Putra U")
+    st.caption("Copyright © 2025")
 
 pg = st.navigation([home_page, list_mutual_fund_page, list_criteria_page, recommendation_page])
 pg.run()
