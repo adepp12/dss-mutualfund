@@ -1,6 +1,6 @@
 great_tables==0.20.0
 numpy==2.4.1
-pandas==3.0.0
+pandas==2.3.3
 streamlit==1.52.2
 streamlit_extras==0.7.8
 streamlit_sortables==0.3.1
