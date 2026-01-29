@@ -1,18 +1,35 @@
 import streamlit as st
 import pandas as pd
+from urllib.error import URLError, HTTPError
 from function.preprocessing import cleaning_data
 
 st.set_page_config(layout="wide")
 
 # mengambil dataset dan simpan di session_state
 if "clean_df" not in st.session_state:
-    url_dataset = st.secrets["URL_DATASET"]
-    dataset_df = pd.read_csv(url_dataset)
-    clean_df = cleaning_data(dataset_df)
-    st.session_state["clean_df"] = clean_df
-    
-    last_update = pd.to_datetime(clean_df['Waktu Scraping'][0]).strftime('%d %B %Y')
-    st.session_state.last_update = last_update
+    try:
+        url_dataset = st.secrets["URL_DATASET"]
+        dataset_df = pd.read_csv(url_dataset)
+        clean_df = cleaning_data(dataset_df)
+        st.session_state["clean_df"] = clean_df
+
+        last_update = pd.to_datetime(clean_df['Waktu Scraping'][0]).strftime('%d %B %Y')
+        st.session_state.last_update = last_update
+
+    except HTTPError as e:
+        st.error(
+            f"Tidak dapat mengambil dataset dari server (HTTP {e.code}). "
+            "Silakan cek kembali URL atau coba beberapa saat lagi."
+        )
+
+    except URLError:
+        st.error(
+            "Gagal terhubung ke server dataset. "
+            "Pastikan koneksi internet Anda aktif."
+        )
+
+    except Exception:
+        st.error("Terjadi kesalahan saat memuat dataset.")
 
 # st.sidebar.write("Copyright 2025")
 
