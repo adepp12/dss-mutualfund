@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from streamlit_sortables import sort_items
 from function.mcdm_method import roc_weighting2, moora_ranking2
 from constant import DATA_CRITERIA
@@ -134,20 +135,58 @@ if st.session_state.get("moora_ranking_df") is not None:
     
     st.markdown("#### :material/leaderboard: Rekomendasi Produk Reksa Dana:")
 
-    # container button download csv
-    with st.container(horizontal=True, horizontal_alignment="right"):
-        # moora_result_csv = pd.DataFrame.to_csv(moora_ranking_df, index=False).encode("utf-8")
-        cols_to_exclude = ["Tanggal Peluncuran", "Min. Penjualan", "URL Detail", "Waktu Scraping"]
+    # container preview button, download button
+    # dataframe for preview, download
+    cols_to_exclude = ["Tanggal Peluncuran", "Min. Penjualan", "URL Detail", "Waktu Scraping"]
+    moora_preview_download_df = moora_ranking_df.drop(columns=cols_to_exclude, errors="ignore")
 
+    with st.container(horizontal=True, horizontal_alignment="right"):
+        # preview-calculation-detail-button
+        @st.dialog("Detail Perhitungan SPK", width="large")
+        def preview_calculation_table():
+            with st.container(width="content", horizontal=True, border=True):
+                # container-tabel-bobot
+                with st.container(width="content", horizontal_alignment="center"):
+                    with st.container(width="content"):
+                        st.markdown("#### Tabel Bobot ROC")
+                    weight_preview_df = (pd.DataFrame(list(bobot_kriteria.items()), columns=["Nama Kriteria", "Bobot ROC"]))
+                    st.dataframe(
+                        weight_preview_df,
+                        width="content",
+                        hide_index=True,
+                    )
+                # container-tabel-moora
+                with st.container(width="stretch", horizontal_alignment="center"):
+                    with st.container(width="content"):
+                        st.markdown("#### Tabel Perhitungan MOORA")
+                    st.dataframe(moora_preview_download_df.drop(columns=["Jenis", "Tingkat Resiko", "Bank Kustodian", "Bank Penampung"], errors="ignore"), hide_index=True, width="content")
+
+            # barchart-moora-score
+            with st.container(width="stretch", border=True, horizontal_alignment="center"):
+                with st.container(width="content"):
+                    st.markdown("#### Grafik Skor Akhir Perhitungan SPK")
+                moora_preview_download_df["barchart-color"] = moora_preview_download_df["Skor Akhir"].apply(
+                    lambda v: "#ff4b4b" if v < 0 else "#00c853"
+                )
+                st.bar_chart(
+                    moora_preview_download_df,
+                    x="Nama Produk",
+                    y="Skor Akhir",
+                    color="barchart-color",
+                    sort=False,
+                    x_label=None
+                )
+
+        if st.button("Pratinjau Hasil Perhitungan", icon=":material/description:"):
+            preview_calculation_table()
+        
+        # download-csv button
         moora_result_csv = (
-            moora_ranking_df
-            .drop(columns=cols_to_exclude, errors="ignore")  # hanya untuk output
-            .to_csv(index=False)
-            .encode("utf-8")
+            moora_preview_download_df.to_csv(index=False, sep=';', decimal=',').encode("utf-8")
         )
         last_update = st.session_state.get("last_update", "unknown")
         st.download_button(
-            label="Download Hasil Perhitungan (.csv)",
+            label="Unduh Detail Perhitungan (.csv)",
             data=moora_result_csv,
             file_name=f"hasil_perhitungan_dss_{last_update}.csv",
             mime="text/csv",
@@ -230,7 +269,7 @@ if st.session_state.get("moora_ranking_df") is not None:
                         
                     # 1. Ranking dengan Circle Icon (Native)
                     with cols[0]:
-                        with st.container(horizontal=False, width="content"):
+                        with st.container(horizontal=True, width="content"):
                             if row['Ranking'] <= 3:
                                 st.write("#### :material/thumb_up:")
                                 st.markdown(f"### {row['Ranking']}")
