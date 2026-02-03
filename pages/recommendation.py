@@ -4,6 +4,7 @@ from streamlit_sortables import sort_items
 from function.mcdm_method import roc_weighting2, moora_ranking2
 from constant import DATA_CRITERIA
 
+# styling-page
 st.html(
     """
     <style>
@@ -22,10 +23,10 @@ st.html(
     }
 
     @media (max-width: 768px) {
-        div.st-key-priority-direction-info-container {
+        div.st-key-priority-direction-info-container,
+        div.st-key-pc-barchart-container {
             display: none !important;
         }
-
     }
 
     @media (min-width: 769px) {
@@ -136,16 +137,17 @@ if st.session_state.get("moora_ranking_df") is not None:
     st.markdown("#### :material/leaderboard: Rekomendasi Produk Reksa Dana:")
 
     # container preview button, download button
-    # dataframe for preview, download
-    cols_to_exclude = ["Tanggal Peluncuran", "Min. Penjualan", "URL Detail", "Waktu Scraping"]
-    moora_preview_download_df = moora_ranking_df.drop(columns=cols_to_exclude, errors="ignore")
+        # dataframe for preview, download
+    columns_to_exclude = ["Tanggal Peluncuran", "Min. Penjualan", "URL Detail", "Waktu Scraping"]
+    moora_preview_download_df = moora_ranking_df.drop(columns=columns_to_exclude, errors="ignore")
 
     with st.container(horizontal=True, horizontal_alignment="right"):
         # preview-calculation-detail-button
-        @st.dialog("Detail Perhitungan SPK", width="large")
+        @st.dialog("Pratinjau Hasil Perhitungan SPK", width="large")
         def preview_calculation_table():
+            # parent-container-roc-moora
             with st.container(width="content", horizontal=True, border=True):
-                # container-tabel-bobot
+                # container-tabel-roc
                 with st.container(width="content", horizontal_alignment="center"):
                     with st.container(width="content"):
                         st.markdown("#### Tabel Bobot ROC")
@@ -153,8 +155,9 @@ if st.session_state.get("moora_ranking_df") is not None:
                     st.dataframe(
                         weight_preview_df,
                         width="content",
-                        hide_index=True,
+                        hide_index=True
                     )
+
                 # container-tabel-moora
                 with st.container(width="stretch", horizontal_alignment="center"):
                     with st.container(width="content"):
@@ -162,27 +165,55 @@ if st.session_state.get("moora_ranking_df") is not None:
                     st.dataframe(moora_preview_download_df.drop(columns=["Jenis", "Tingkat Resiko", "Bank Kustodian", "Bank Penampung"], errors="ignore"), hide_index=True, width="content")
 
             # barchart-moora-score
+                # barchart-parent-container
             with st.container(width="stretch", border=True, horizontal_alignment="center"):
+                # title-chart-container
                 with st.container(width="content"):
-                    st.markdown("#### Grafik Skor Akhir Perhitungan SPK")
+                        st.markdown("#### Grafik Skor Akhir Perhitungan SPK")
+                # set-color-barchart
                 moora_preview_download_df["barchart-color"] = moora_preview_download_df["Skor Akhir"].apply(
-                    lambda v: "#ff4b4b" if v < 0 else "#00c853"
-                )
-                st.bar_chart(
-                    moora_preview_download_df,
-                    x="Nama Produk",
-                    y="Skor Akhir",
-                    color="barchart-color",
-                    sort=False,
-                    x_label=None
-                )
+                        lambda v: "#ff4b4b" if v < 0 else "#00c853"
+                    )
+                # if-device width > 769px-parent-container (pc)
+                with st.container(width="stretch", key="pc-barchart-container"):  
+                    st.bar_chart(
+                        moora_preview_download_df,
+                        x="Nama Produk",
+                        y="Skor Akhir",
+                        color="barchart-color",
+                        sort=False,
+                        x_label=None
+                    )
+                # if-device < 769px-parent-container (mobile)
+                with st.container(width="stretch", key="mobile-barchart-container"):
+                    cols_barchart = st.columns(2, border=True)
+                    # top-10-barchart
+                    with cols_barchart[0]:
+                        st.write("Produk 10 Teratas :material/arrow_upward:")
+                        st.bar_chart(
+                            moora_preview_download_df.head(10),
+                            x="Nama Produk",
+                            y="Skor Akhir",
+                            color="barchart-color",
+                            sort=False
+                        )
+                    # bottom-10-barchart
+                    with cols_barchart[1]:
+                        st.write("Produk 10 Terbawah :material/arrow_downward:")
+                        st.bar_chart(
+                            moora_preview_download_df.tail(10),
+                            x="Nama Produk",
+                            y="Skor Akhir",
+                            color="barchart-color",
+                            sort=False
+                        )
 
         if st.button("Pratinjau Hasil Perhitungan", icon=":material/description:"):
             preview_calculation_table()
         
         # download-csv button
         moora_result_csv = (
-            moora_preview_download_df.to_csv(index=False, sep=';', decimal=',').encode("utf-8")
+            moora_preview_download_df.drop(columns=["barchart-color"], errors="ignore").to_csv(index=False, sep=';', decimal=',').encode("utf-8")
         )
         last_update = st.session_state.get("last_update", "unknown")
         st.download_button(
