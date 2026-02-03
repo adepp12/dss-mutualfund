@@ -138,7 +138,7 @@ if st.session_state.get("moora_ranking_df") is not None:
 
     # container preview button, download button
         # dataframe for preview, download
-    columns_to_exclude = ["Tanggal Peluncuran", "Min. Penjualan", "URL Detail", "Waktu Scraping"]
+    columns_to_exclude = ["Tanggal Peluncuran", "Min. Penjualan", "URL Detail", "Waktu Scraping", "Bank Kustodian", "Bank Penampung"]
     moora_preview_download_df = moora_ranking_df.drop(columns=columns_to_exclude, errors="ignore")
 
     with st.container(horizontal=True, horizontal_alignment="right"):
@@ -162,7 +162,7 @@ if st.session_state.get("moora_ranking_df") is not None:
                 with st.container(width="stretch", horizontal_alignment="center"):
                     with st.container(width="content"):
                         st.markdown("#### Tabel Perhitungan MOORA")
-                    st.dataframe(moora_preview_download_df.drop(columns=["Jenis", "Tingkat Resiko", "Bank Kustodian", "Bank Penampung"], errors="ignore"), hide_index=True, width="content")
+                    st.dataframe(moora_preview_download_df.drop(columns=["Jenis", "Tingkat Resiko"], errors="ignore"), hide_index=True, width="content")
 
             # barchart-moora-score
                 # barchart-parent-container
