@@ -131,8 +131,7 @@ def moora_ranking2(data, kriteria, jenis_kriteria, bobot=None):
         skor.append(nilai_yi)
 
     # hasil pemeringkatan
-    full_data_df = full_data_df.join(normalisasi_df)
-    full_data_df = full_data_df.join(terbobot_df)
+    full_data_df = full_data_df.join([normalisasi_df, terbobot_df])
     full_data_df["Nilai Benefit"] = list_nilai_benefit
     full_data_df["Nilai Cost"] = list_nilai_cost
     full_data_df["Skor Akhir"] = skor
