@@ -1,3 +1,4 @@
+# data for criteria page, recommendation page
 DATA_CRITERIA = [
     {
         "Nama Kriteria": "Return",

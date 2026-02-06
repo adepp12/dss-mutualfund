@@ -1,7 +1,6 @@
 import streamlit as st
 
 st.title("Sistem Pendukung Keputusan Rekomendasi Reksa Dana")
-
 st.markdown('''
 Sistem Pendukung Keputusan (SPK) ini merupakan sebuah sistem yang dapat membantu pengguna, khususnya investor reksa dana, untuk memilih produk reksa dana berdasarkan perhitungan matematis yang sesuai dengan preferensi bobot kriteria investor.  
 

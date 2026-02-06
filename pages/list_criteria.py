@@ -4,23 +4,6 @@ from streamlit_extras.great_tables import great_tables
 from great_tables import GT
 from constant import DATA_CRITERIA
 
-st.title("Daftar Kriteria Seleksi")
-st.write("Berikut merupakan daftar kriteria beserta penjelasannya yang digunakan untuk pertimbangan dalam memilih produk reksa dana")
-
-df_criteria = pd.DataFrame(DATA_CRITERIA).drop(columns=["Nama Kolom"])
-
-table_criteria = (
-    GT(df_criteria)
-    .cols_align(
-        align="left",
-        columns=["Nama Kriteria", "Deskripsi"]
-    )
-    .cols_align(
-        align="center",
-        columns=["Satuan", "Jenis"]
-    )
-)
-
 st.html(
 """
 <style>
@@ -38,6 +21,23 @@ st.html(
 </style>
 """)
 
+st.title("Daftar Kriteria Seleksi")
+st.write("Berikut merupakan daftar kriteria beserta penjelasannya yang digunakan untuk pertimbangan dalam memilih produk reksa dana")
+
+df_criteria = pd.DataFrame(DATA_CRITERIA).drop(columns=["Nama Kolom"])
+
+table_criteria = (
+    GT(df_criteria)
+    .cols_align(
+        align="left",
+        columns=["Nama Kriteria", "Deskripsi"]
+    )
+    .cols_align(
+        align="center",
+        columns=["Satuan", "Jenis"]
+    )
+)
+
 great_tables(table_criteria)  
 
 # menggunakan markdown table, lebih cepat
@@ -45,5 +45,4 @@ great_tables(table_criteria)
 # md_table += "| --- | --- | --- | --- |\n"
 # for row in DATA_CRITERIA:
 #     md_table += f"| {row['Nama Kriteria']} | {row['Deskripsi']} | {row['Satuan']} | {row['Jenis']} |\n"
-
 # st.markdown(md_table)

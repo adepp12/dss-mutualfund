@@ -79,14 +79,14 @@ clean_df_sorted = clean_df.sort_values(by=sort_col, ascending=ascending, ignore_
 with st.container(width="stretch", key="list-mutual-fund-container"):
     cols_count = 3
     
-    # Loop per baris, bukan per item
+    # loop per baris, bukan per item
     for i in range(0, len(clean_df_sorted), cols_count):
         cols = st.columns(cols_count)
         
-        # Ambil data untuk 1 baris (3 item)
+        # ambil data untuk 1 baris (3 item)
         for j in range(cols_count):
             index = i + j
-            if index < len(clean_df_sorted):  # Cek jika masih ada data
+            if index < len(clean_df_sorted):  # cek jika masih ada data
                 row = clean_df_sorted.iloc[index]
                 
                 with cols[j]:
