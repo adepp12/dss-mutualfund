@@ -65,7 +65,7 @@ with st.sidebar:
     st.page_link(list_criteria_page, label="Daftar Kriteria Seleksi", icon=":material/format_list_bulleted:")
     st.page_link(recommendation_page, label="Rekomendasi Reksa Dana", icon=":material/recommend:")
     
-    st.caption("Copyright © 2025")
+    st.caption("Copyright © 2026")
 
 pg = st.navigation([home_page, list_mutual_fund_page, list_criteria_page, recommendation_page])
 pg.run()
